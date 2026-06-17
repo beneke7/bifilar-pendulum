@@ -355,6 +355,7 @@ h2 {
 .story-step > .media-stack,
 .story-step > .full-video,
 .story-step > .theory-grid,
+.story-step > .derivation,
 .story-step > .plain-equation,
 .story-step > .result-placeholder,
 .story-step > .result-figure {
@@ -368,6 +369,7 @@ h2 {
 .story-step.in > .media-stack,
 .story-step.in > .full-video,
 .story-step.in > .theory-grid,
+.story-step.in > .derivation,
 .story-step.in > .plain-equation,
 .story-step.in > .result-placeholder,
 .story-step.in > .result-figure {
@@ -666,6 +668,65 @@ h2 {
   grid-template-columns: minmax(260px, 0.9fr) minmax(320px, 1.1fr);
   gap: clamp(28px, 6vw, 78px);
   align-items: start;
+}
+
+/* Theory slide as a flowing academic derivation (diagram + stacked equations),
+   allowed to grow past one screen instead of being clipped by the slide. */
+.theory-step {
+  display: block;
+  height: auto;
+  min-height: 100svh;
+  overflow: visible;
+}
+
+.theory-derivation {
+  margin-top: clamp(18px, 3vw, 34px);
+  align-items: center;
+  gap: clamp(24px, 4vw, 60px);
+}
+
+.deriv-figure {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+}
+
+.deriv-figure img {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.deriv-figure figcaption {
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.deriv-steps {
+  display: grid;
+  gap: clamp(4px, 0.8vw, 10px);
+}
+
+.deriv-steps p {
+  margin: clamp(6px, 1vw, 12px) 0 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
+}
+
+.deriv-steps .eq {
+  border-top: none;
+  padding-top: 2px;
+}
+
+.deriv-steps .result-eq {
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
 }
 
 .derivation-sketch {

@@ -87,32 +87,23 @@
     <section id="step4" class="story-section story-step theory-step slide-right">
       <p class="eyebrow">Negyedik lépés</p>
       <h2>Elmélet.</h2>
-      <div class="theory-grid">
-        <article>
-          <h3>Koordináta</h3>
-          <p>A rúd csavarodását egyetlen generalizált koordinátával írjuk le: \( \theta \). A fonalak fele távolsága \( s=b/2 \).</p>
-          <div class="eq">\[ l^2 = 2s^2(1-\cos\theta)+z(\theta)^2 \]</div>
-        </article>
-        <article>
-          <h3>Emelkedés</h3>
-          <p>Csavaráskor a fonalak ferdülnek, ezért a rúd tömegközéppontja megemelkedik. Ez adja a visszatérítő energiát.</p>
-          <div class="eq">\[ \Delta h(\theta)=l-\sqrt{l^2-2s^2(1-\cos\theta)} \]</div>
-        </article>
-        <article>
-          <h3>Energia</h3>
-          <p>A függőleges sebesség kicsi, ezért a kinetikus energiát tiszta forgásként vesszük.</p>
-          <div class="eq">\[ K=\frac12 I\dot\theta^2,\qquad V=mg\Delta h \]</div>
-        </article>
-        <article class="wide">
-          <h3>Mozgásegyenlet</h3>
-          <p>A Lagrange-egyenletből, lineáris csillapítással:</p>
-          <div class="eq">\[ I\ddot\theta+c\dot\theta+\frac{mgs^2\sin\theta}{\sqrt{l^2-2s^2(1-\cos\theta)}}=0 \]</div>
-        </article>
-        <article class="wide result">
-          <h3>Kis szögek</h3>
-          <p>Ha \( \sin\theta\approx\theta \) és \( \cos\theta\approx1-\theta^2/2 \), akkor egyszerű csillapított harmonikus rezgést kapunk.</p>
-          <div class="eq">\[ T=2\pi\frac{L}{b}\sqrt{\frac{l}{3g}}=\frac{2\pi}{f}\sqrt{\frac{l}{3g}} \]</div>
-        </article>
+      <div class="derivation theory-derivation">
+        <figure class="deriv-figure">
+          <img src="./pics/inga2.png" alt="A csavarodó kettős inga geometriája" data-note="A geometria: a felfüggesztési pontok b = 2s távolságra, a fonalak hossza ℓ, a rúd θ szöggel elcsavarodva, miközben a tömegközéppont Δh-val megemelkedik." />
+          <figcaption>Geometria: \(b=2s\), fonálhossz \(\ell\), elcsavarodás \(\theta\).</figcaption>
+        </figure>
+        <div class="deriv-steps">
+          <p>Állandó fonálhossz (kényszerfeltétel):</p>
+          <div class="eq">\[ \ell^2 = 2s^2\,(1-\cos\theta) + z(\theta)^2 \]</div>
+          <p>A tömegközéppont emelkedése:</p>
+          <div class="eq">\[ \Delta h = \ell - \sqrt{\ell^2 - 2s^2(1-\cos\theta)} \]</div>
+          <p>Lagrange-formalizmus, lineáris csillapítással:</p>
+          <div class="eq">\[ I\ddot\theta + c\dot\theta + \frac{mgs^2\sin\theta}{\sqrt{\ell^2 - 2s^2(1-\cos\theta)}} = 0 \]</div>
+          <p>Kis szögekre (\(\sin\theta\approx\theta\)):</p>
+          <div class="eq">\[ \ddot\theta + 2\gamma\dot\theta + \omega_0^2\,\theta = 0, \qquad \omega_0 = \frac{b}{L}\sqrt{\frac{3g}{\ell}} \]</div>
+          <p>A periódusidő (\(f=b/L\)):</p>
+          <div class="eq result-eq">\[ T = \frac{2\pi}{f}\sqrt{\frac{\ell}{3g}} \]</div>
+        </div>
       </div>
       <a class="scroll-cue step-next" href="#step5" aria-label="Scroll to step five"></a>
     </section>
