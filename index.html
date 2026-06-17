@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bifilar Pendulum</title>
+  <meta name="description" content="An explorable bifilar pendulum that measures gravity from a twisting rod." />
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="./styles.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three.module.js",
+      "three/addons/": "./vendor/"
+    }
+  }
+  </script>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [["\\(", "\\)"], ["$", "$"]] },
+      svg: { fontCache: "global" }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+  <section id="hero" class="hero" aria-label="Bifilar pendulum hero">
+    <canvas id="rig" aria-label="Interactive bifilar pendulum"></canvas>
+    <div class="hero-copy">
+      <p class="eyebrow">Csavarodó kettős inga</p>
+      <h1>Hogyan mérjünk le egy kettős ingát?</h1>
+      <p>Először összerakjuk a kísérletet. A fizikát majd akkor engedjük be, amikor már van mit mérni.</p>
+    </div>
+    <div class="trackers" aria-label="Live pendulum graphs">
+      <div class="tracker">
+        <div><span>θ(t)</span><strong id="phi-value">0.00 rad</strong></div>
+        <canvas id="phi-graph"></canvas>
+        <small>40 s window</small>
+      </div>
+      <div class="tracker">
+        <div><span>θ'(t)</span><strong id="omega-value">0.00 rad/s</strong></div>
+        <canvas id="omega-graph"></canvas>
+        <small>40 s window</small>
+      </div>
+    </div>
+    <a class="scroll-cue" href="#step1" aria-label="Scroll to the first step"></a>
+  </section>
+
+  <main>
+    <section id="step1" class="story-section story-step slide-left">
+      <p class="eyebrow">Első lépés</p>
+      <h2>Avengers assemble.</h2>
+      <div class="media-stack avengers-stack">
+        <img src="./assets/story/avenger1.jpg" alt="A mérés előkészítése az első laborfotón" loading="lazy" />
+        <img src="./assets/story/avenger2.jpg" alt="A mérés előkészítése a második laborfotón" loading="lazy" />
+        <img src="./assets/story/avenger3.jpg" alt="A mérés előkészítése a harmadik laborfotón" loading="lazy" />
+        <img src="./assets/story/avenger4.jpg" alt="A mérés előkészítése a negyedik laborfotón" loading="lazy" />
+      </div>
+      <a class="scroll-cue step-next" href="#step2" aria-label="Scroll to step two"></a>
+    </section>
+
+    <section id="step2" class="story-section story-step slide-right">
+      <p class="eyebrow">Második lépés</p>
+      <h2>Improvizált kísérletösszeállítás.</h2>
+      <div class="media-stack setup-sequence" tabindex="0" aria-label="Lapozható mérési összeállítás képsorozat">
+        <img src="./assets/story/setup1.jpg" alt="Improvizált mérési összeállítás első kép" loading="lazy" />
+        <img src="./assets/story/setup2.jpg" alt="Improvizált mérési összeállítás második kép" loading="lazy" />
+        <img src="./assets/story/setup3.jpg" alt="Improvizált mérési összeállítás harmadik kép" loading="lazy" />
+      </div>
+      <a class="scroll-cue step-next" href="#step2b" aria-label="Scroll to the setup video"></a>
+    </section>
+
+    <section id="step2b" class="story-section story-step video-step slide-down">
+      <p class="eyebrow">Második lépés / b</p>
+      <h2>Az első próba.</h2>
+      <video class="full-video" src="./assets/story/19_10-first10.mp4" controls muted playsinline preload="metadata"></video>
+      <a class="scroll-cue step-next" href="#step3" aria-label="Scroll to step three"></a>
+    </section>
+
+    <section id="step3" class="story-section story-step slide-left">
+      <p class="eyebrow">Harmadik lépés</p>
+      <h2>A tracker nem működik...</h2>
+      <div class="media-stack tracker-stack">
+        <img src="./assets/story/tracker.jpg" alt="Tracker probléma képernyőkép" loading="lazy" />
+      </div>
+      <a class="scroll-cue step-next" href="#step4" aria-label="Scroll to step four"></a>
+    </section>
+
+    <section id="step4" class="story-section story-step theory-step slide-right">
+      <p class="eyebrow">Negyedik lépés</p>
+      <h2>Elmélet.</h2>
+      <div class="theory-grid">
+        <article>
+          <h3>Koordináta</h3>
+          <p>A rúd csavarodását egyetlen generalizált koordinátával írjuk le: \( \theta \). A fonalak fele távolsága \( s=b/2 \).</p>
+          <div class="eq">\[ l^2 = 2s^2(1-\cos\theta)+z(\theta)^2 \]</div>
+        </article>
+        <article>
+          <h3>Emelkedés</h3>
+          <p>Csavaráskor a fonalak ferdülnek, ezért a rúd tömegközéppontja megemelkedik. Ez adja a visszatérítő energiát.</p>
+          <div class="eq">\[ \Delta h(\theta)=l-\sqrt{l^2-2s^2(1-\cos\theta)} \]</div>
+        </article>
+        <article>
+          <h3>Energia</h3>
+          <p>A függőleges sebesség kicsi, ezért a kinetikus energiát tiszta forgásként vesszük.</p>
+          <div class="eq">\[ K=\frac12 I\dot\theta^2,\qquad V=mg\Delta h \]</div>
+        </article>
+        <article class="wide">
+          <h3>Mozgásegyenlet</h3>
+          <p>A Lagrange-egyenletből, lineáris csillapítással:</p>
+          <div class="eq">\[ I\ddot\theta+c\dot\theta+\frac{mgs^2\sin\theta}{\sqrt{l^2-2s^2(1-\cos\theta)}}=0 \]</div>
+        </article>
+        <article class="wide result">
+          <h3>Kis szögek</h3>
+          <p>Ha \( \sin\theta\approx\theta \) és \( \cos\theta\approx1-\theta^2/2 \), akkor egyszerű csillapított harmonikus rezgést kapunk.</p>
+          <div class="eq">\[ T=2\pi\frac{L}{b}\sqrt{\frac{l}{3g}}=\frac{2\pi}{f}\sqrt{\frac{l}{3g}} \]</div>
+        </article>
+      </div>
+      <a class="scroll-cue step-next" href="#step5" aria-label="Scroll to step five"></a>
+    </section>
+
+    <section id="step5" class="story-section story-step slide-left">
+      <p class="eyebrow">Ötödik lépés / a</p>
+      <h2>Rossz adat.</h2>
+      <div class="media-stack single-plot contain-media">
+        <img src="./pics/filter1.png" alt="Rossz képfeldolgozási példa" data-note="A háttér (sötét fa, árnyék) majdnem olyan fekete, mint a jelölők, ezért a maszk szétfolyik és a követő nem a rúd pontjait, hanem nagy háttérfoltokat fog. Az ilyen klipeket elvetjük." loading="lazy" />
+      </div>
+      <a class="scroll-cue step-next" href="#step5b" aria-label="Scroll to good data"></a>
+    </section>
+
+    <section id="step5b" class="story-section story-step slide-right">
+      <p class="eyebrow">Ötödik lépés / b</p>
+      <h2>Jó adat.</h2>
+      <div class="media-stack single-plot contain-media">
+        <img src="./pics/filter2.png" alt="Jó képfeldolgozási példa" data-note="Jól megválasztott feketeség-küszöbnél csak a három jelölő marad meg a maszkon. Így a rúd két vége és a középpont tisztán, egymástól elkülönítve követhető." loading="lazy" />
+      </div>
+      <a class="scroll-cue step-next" href="#step6" aria-label="Scroll to bad algorithm"></a>
+    </section>
+
+    <section id="step6" class="story-section story-step slide-left">
+      <p class="eyebrow">Hatodik lépés / a</p>
+      <h2>Rossz algo.</h2>
+      <div class="media-stack single-plot contain-media">
+        <img src="./pics/IMG_0607_tracked_plot.png" alt="Rossz követési algoritmus példa" data-note="A korai követő minden képkockán egyszerűen a legnagyobb fekete foltot kereste, ezért gyakran átugrott a kézre vagy a háttérre. A görbe tele van kiugró, nem fizikai hibákkal." loading="lazy" />
+      </div>
+      <a class="scroll-cue step-next" href="#step6b" aria-label="Scroll to good algorithm"></a>
+    </section>
+
+    <section id="step6b" class="story-section story-step slide-right">
+      <p class="eyebrow">Hatodik lépés / b</p>
+      <h2>Jó algo.</h2>
+      <div class="media-stack single-plot contain-media">
+        <img src="./pics/IMG_0605_tracked_plot.png" alt="Jó követési algoritmus példa" data-note="A javított követő a kép három sávjára (két pólus + középpont) bontva keres, és minden jelölőt a korábbi helyéhez legközelebbi folthoz köt. Az eredmény egy tiszta, jól követhető rezgés." loading="lazy" />
+      </div>
+      <a class="scroll-cue step-next" href="#step7" aria-label="Scroll to step seven"></a>
+    </section>
+
+    <section id="step7" class="story-section story-step slide-down">
+      <p class="eyebrow">Hetedik lépés</p>
+      <h2>\(T=\mathrm{áll.}?\)</h2>
+      <div class="media-stack single-plot contain-media">
+        <img src="./pics/nonlin.png" alt="Periódusidő amplitúdófüggése" loading="lazy" />
+      </div>
+      <a class="scroll-cue step-next" href="#step8" aria-label="Scroll to step eight"></a>
+    </section>
+
+    <section id="step8" class="story-section story-step equation-step slide-left">
+      <p class="eyebrow">Nyolcadik lépés</p>
+      <h2>Nemlineáris modell.</h2>
+      <div class="plain-equation">\[ T(A)=T_{0,\mathrm{fit}}\left(1+\beta A^2\right) \]</div>
+      <a class="scroll-cue step-next" href="#step9" aria-label="Scroll to step nine"></a>
+    </section>
+
+    <section id="step9" class="story-section story-step slide-right">
+      <p class="eyebrow">Kilencedik lépés</p>
+      <h2>Az illesztés.</h2>
+      <div class="media-stack single-plot contain-media">
+        <img src="./pics/fit_overlay.png" alt="Elfogadott csillapított szinusz illesztések" loading="lazy" />
+      </div>
+      <a class="scroll-cue step-next" href="#step10" aria-label="Scroll to step ten"></a>
+    </section>
+
+    <section id="step10" class="story-section story-step results-step slide-down">
+      <p class="eyebrow">Tizedik lépés</p>
+      <h2>A három skálatörvény teljesül.</h2>
+      <figure class="result-figure">
+        <div class="media-stack law-grid">
+          <img src="./pics/global_sqrt.png" alt="Periódusidő a fonalhossz függvényében" data-note="A fonalhossz hatása: T₀² egyenesen arányos a fonalhosszal, vagyis T₀ ∝ √ℓ. A mért kitevő 0,509 ± 0,013 (elmélet: 0,5)." loading="lazy" />
+          <img src="./pics/global_L.png" alt="Periódusidő a rúdhossz függvényében" data-note="A rúdhossz hatása: rögzített f = b/L mellett a periódusidő nem függ külön a rúd hosszától. A mért kitevő −0,003 ± 0,043 (elmélet: 0)." loading="lazy" />
+          <img src="./pics/global_attach.png" alt="Periódusidő a felfüggesztési távolság függvényében" data-note="A felfüggesztési távolság hatása: T₀ ∝ 1/f. A mért kitevő −0,974 ± 0,028 (elmélet: −1)." loading="lazy" />
+        </div>
+        <figcaption class="law-table">
+          <span><b>√ℓ</b> mért 0,509 ± 0,013 · elmélet 0,5</span>
+          <span><b>L</b> mért −0,003 ± 0,043 · elmélet 0</span>
+          <span><b>1/f</b> mért −0,974 ± 0,028 · elmélet −1</span>
+        </figcaption>
+      </figure>
+      <a class="scroll-cue step-next" href="#step11" aria-label="Scroll to the gravity result"></a>
+    </section>
+
+    <section id="step11" class="story-section story-step results-step slide-left">
+      <p class="eyebrow">Tizenegyedik lépés</p>
+      <h2>g = 9,27 ± 0,64 m/s²</h2>
+      <figure class="result-figure">
+        <div class="media-stack single-plot contain-media">
+          <img src="./pics/global_g.png" alt="Klipenként számolt nehézségi gyorsulás" data-note="Minden mérésből külön g értéket számoltunk; az ábra ezek szórását mutatja a közös átlag körül." loading="lazy" />
+        </div>
+        <figcaption class="law-table">
+          <span>10 klipből, klipenkénti szórással</span>
+          <span>≈ 5,5%-kal a 9,81 alatt</span>
+          <span>fő szisztematika: a b felfüggesztési távolság néhány mm-es bizonytalansága, amire T₀ a legérzékenyebb</span>
+        </figcaption>
+      </figure>
+    </section>
+  </main>
+
+  <script type="module" src="./scene.js"></script>
+</body>
+</html>
