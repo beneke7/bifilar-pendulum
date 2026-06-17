@@ -363,7 +363,14 @@ h2 {
   transition: opacity 620ms ease, transform 620ms ease;
 }
 
-.story-step.in > * {
+.story-step.in > .eyebrow,
+.story-step.in > h2,
+.story-step.in > .media-stack,
+.story-step.in > .full-video,
+.story-step.in > .theory-grid,
+.story-step.in > .plain-equation,
+.story-step.in > .result-placeholder,
+.story-step.in > .result-figure {
   opacity: 1;
   transform: none;
 }
@@ -1005,8 +1012,6 @@ h2 {
   .spark { display: none; }
   .story-step > * {
     animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
     transition: none !important;
   }
 }

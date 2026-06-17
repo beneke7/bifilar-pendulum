@@ -302,7 +302,11 @@ canvas.addEventListener('pointerup', event => {
 addEventListener('resize', resize);
 
 let last = performance.now();
+let heroVisible = true;
+let running = false;
+
 function animate(now) {
+  if (!heroVisible) { running = false; return; }   // stop rendering once scrolled past the hero
   const dt = Math.min((now - last) / 1000, 0.03);
   last = now;
   if (!dragging) step(state, dt);
@@ -313,7 +317,21 @@ function animate(now) {
   requestAnimationFrame(animate);
 }
 
+function startLoop() {
+  if (running) return;
+  running = true;
+  last = performance.now();
+  requestAnimationFrame(animate);
+}
+
+// Only run the 3D loop while the hero is on screen — the long story below
+// doesn't need a 60fps WebGL canvas spinning behind it.
+new IntersectionObserver(([e]) => {
+  heroVisible = e.isIntersecting;
+  if (heroVisible) startLoop();
+}, { threshold: 0.01 }).observe(hero);
+
 setView();
 resize();
 renderRig();
-requestAnimationFrame(animate);
+startLoop();
